@@ -7,6 +7,7 @@ const jwt = require('jsonwebtoken');
 
 const generateOTP = async (req, res)=>{
     const {email} = req.body;
+    console.log(req.body);
     if(!email) return res.status(400).json({message: "Email is required"});
     const otp = generatedOTP();
     const expiresAt = new Date(Date.now()+5*60*1000);
