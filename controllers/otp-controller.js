@@ -49,6 +49,7 @@ const generateOTP = async (req, res)=>{
 
         res.json({message:"OTP sent successful"});
     } catch (error) {
+        console.error("❌ Error sending OTP:", error);
         res.status(500).json({message:"Error sending OTP"});
     }
 };
