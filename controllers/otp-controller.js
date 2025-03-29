@@ -10,12 +10,13 @@ const generateOTP = async (req, res)=>{
     console.log(req.body);
     if(!email) return res.status(400).json({message: "Email is required"});
     const otp = generatedOTP();
+    console.log("OTP GENERATED")
     const expiresAt = new Date(Date.now()+5*60*1000);
     try {
         await OTP.findOneAndUpdate(
             {email}, {otp,expiresAt}, {upsert:true, new:true}
         );
-
+        console.log("USER FOUND");
         const transporter = nodemailer.createTransport({
             service:"gmail",
             auth:{
@@ -23,7 +24,7 @@ const generateOTP = async (req, res)=>{
                 pass:process.env.EMAIL_PASS,
             },
         });
-
+        console.log("MAIL TRANSPORTER INITIALIZED")
         await transporter.sendMail({
             from:process.env.EMAIL_USER,
             to:email,
@@ -44,6 +45,7 @@ const generateOTP = async (req, res)=>{
             </div>
         `,
         });
+        console.log("MAIL SENT");
 
         res.json({message:"OTP sent successful"});
     } catch (error) {
