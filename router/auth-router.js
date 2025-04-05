@@ -8,10 +8,6 @@ router.route('/register')
 router.route('/login')
     .post(auth_controller.login)
 
-router.route('/password-change')
-    .post(auth_controller.change)
-
-
 const otp_controller = require('../controllers/otp-controller')
 router.route('/request-otp')
     .post(otp_controller.generateOTP)

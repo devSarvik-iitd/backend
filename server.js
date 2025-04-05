@@ -8,7 +8,7 @@ app.use(cookieParser());  // ✅ Required for reading cookies
 
 app.use(
     cors({
-        origin:["http://localhost:5173","http://143.110.178.26:3000"],
+        origin:["http://localhost:5173","http://143.110.178.26:3000","https://api.thenexstep.in"],
         credentials:true
     })
 );

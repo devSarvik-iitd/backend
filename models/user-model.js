@@ -3,11 +3,11 @@ const bcryptjs = require('bcryptjs');
 
 // Schema for a user
 const userSchema = new mongoose.Schema({
-    firstName: {
+    name: {
         type: String,
         require: true,
     },
-    lastName: {
+    displayName: {
         type: String,
         require: false,
     },
@@ -20,7 +20,7 @@ const userSchema = new mongoose.Schema({
         type: String,
         require: true,
     },
-    password: {
+    picture: {
         type: String,
         require: true,
     },
@@ -29,10 +29,10 @@ const userSchema = new mongoose.Schema({
         require: true,
         default: 'student',
     },
-    gender:{
-        type: String,
-        require: true,
-    },
+    // gender:{
+    //     type: String,
+    //     require: true,
+    // },
     tokens: [
         { 
             token: String,
@@ -41,21 +41,6 @@ const userSchema = new mongoose.Schema({
     ]
 
 });
-
-
-//Securing the password with bcrypt
-userSchema.pre('save', async function (next) {
-    // console.log(this);
-    const user = this;
-    if (!user.isModified('password')) { next(); }
-    try {
-        const saltRound = await bcryptjs.genSalt(10);
-        const hash_password = await bcryptjs.hash(user.password, saltRound);
-        user.password = hash_password;
-    } catch (error) {
-        console.log(error)
-    }
-})
 
 
 // Define the model or the collection name
