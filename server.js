@@ -14,12 +14,10 @@ app.use(
 );
 app.use(express.json()); 
 // Using router to classify API requests based on their types
-const auth_router = require('./router/auth-router.js');
-const doubt_router = require('./router/doubt-router.js');
-const user_router = require('./router/user-router.js');
+const auth_router = require('./router/authRouter.js');
+const user_router = require('./router/userRouter.js');
 
 app.use("/auth", auth_router);
-app.use("/doubt", doubt_router);
 app.use("/user", user_router);
 
 
