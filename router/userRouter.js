@@ -11,5 +11,4 @@ router.route('/logout')
 router.route('/logoutall')
     .post(authenticateUser,controller.logoutall)
 
-
 module.exports = router;

@@ -1,30 +1,22 @@
-const User = require('../models/user-model');
-const dashboard = async(req,res)=>{
-    res
-        .status(200)
-        .json({message:"Dashboard successful", user:req.user});
-}
-const logout = async(req,res)=>{
-    try{
-        res.clearCookie( "token", {
-            httpOnly : true,
-            secure: true,
-            sameSite: "strict",
-        });
+const userService = require('../services/userServices');
 
-        await User.findByIdAndUpdate(req.user.id, {
-            $pull: { tokens: { token: req.token } } // ✅ Correct way to remove a nested object
-        });
-        
-
-        res.status(200).json({ message: "Logged out successfully" });
-    } catch (error) {
-        res.status(500).json({message : "Internal Server error"});
-    }
-}
-const logoutall = async(req,res)=>{
+exports.dashboard = async (req, res) => {
     try {
-        await User.findByIdAndUpdate(req.user.id, { tokens: [] });
+        const result = await userService.getDashboardData(req);
+
+        res.status(result.statusCode).json({
+            success: result.success,
+            message: result.message,
+            user: result.user || null,
+        });
+    } catch (error) {
+        res.status(500).json({ message: "Internal Server Error" })
+    }
+};
+
+exports.logout = async (req, res) => {
+    try {
+        const result = await userService.logoutUser(req);
 
         res.clearCookie("token", {
             httpOnly: true,
@@ -32,9 +24,30 @@ const logoutall = async(req,res)=>{
             sameSite: "strict",
         });
 
-        res.status(200).json({ message: "Logged out from all devices successfully" });
+        return res.status(result.statusCode).json({
+            success: result.success,
+            message: result.message,
+        });
     } catch (error) {
-        res.status(500).json({ message: "Internal Server Error" });
+        res.status(500).json({ message: "Internal Server Error" })
     }
-}
-module.exports = {dashboard, logout, logoutall};
+};
+
+exports.logoutall = async (req, res) => {
+    try {
+        const result = await userService.logoutFromAllDevices(req);
+
+        res.clearCookie("token", {
+            httpOnly: true,
+            secure: true,
+            sameSite: "strict",
+        });
+
+        return res.status(result.statusCode).json({
+            success: result.success,
+            message: result.message,
+        });
+    } catch (error) {
+        res.status(500).json({ message: "Internal Server Error" })
+    }
+};
